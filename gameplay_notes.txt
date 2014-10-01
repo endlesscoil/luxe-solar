@@ -1,0 +1,11 @@
+planetary archaelogist
+- pick planet
+- analyze planet
+-- artifacts
+-- cultures
+-- flora
+-- fauna
+- find the most perfect being!
+- or one that matches
+- have to scan multiple items to determine if correct planet
+- everything randomly generated

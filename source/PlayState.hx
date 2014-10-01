@@ -15,6 +15,7 @@ import flixel.util.FlxPoint;
 class PlayState extends FlxState
 {
     private var _test : PlanetaryBody;
+    private var _test2 : PlanetaryBody;
 
     /**
      * Function that is called up when to state is created to set it up. 
@@ -23,17 +24,23 @@ class PlayState extends FlxState
     {
         super.create();
 
-        _test = new PlanetaryBody(50, "Earth");
+        _test = new PlanetaryBody(50, "Earth", FlxColor.CYAN, 0.0, true);
         _test.position = FlxPoint.weak(FlxG.width / 2, FlxG.height / 2);
-        _test.center_position = FlxPoint.weak(FlxG.width / 2, FlxG.height / 2);
 
-        var moon1 = new PlanetaryBody(10, "The Moon", FlxColor.WHITE);
-        _test.add_child(moon1, 40);
+        var moon1 = new PlanetaryBody(10, "The Moon", FlxColor.WHITE, 1.0, true);
+        _test.add_child(moon1, 60);
 
-        var submoon1 = new PlanetaryBody(5, "Moon2", FlxColor.GREEN);
+        var submoon1 = new PlanetaryBody(5, "Moon2", FlxColor.GREEN, 2.5, true);
         moon1.add_child(submoon1, 20);
 
+        _test2 = new PlanetaryBody(100, "Mars", FlxColor.MAROON, 0.0, true);
+        _test2.position = FlxPoint.weak(200, 300);
+
+        var moon2 = new PlanetaryBody(50, "Mars Moon", FlxColor.WHITE, 0.5, true);
+        _test2.add_child(moon2, 80);
+
         add(_test);
+        add(_test2);
     }
     
     /**
