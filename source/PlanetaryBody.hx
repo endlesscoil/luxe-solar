@@ -21,11 +21,17 @@ class PlanetaryBody
     public var color : Int = FlxColor.AQUAMARINE;
     public var angular_position : Float = 0;
     public var rotation_speed : Float = 0.0;
+    public var rotation_direction : Int = 1;
 
     private var _sprite : FlxSprite = null;
     private var _center_sprite : FlxSprite = null;
 
-    public function new(Size : Int, ?Name : String = "Unknown", ?Color : Int = FlxColor.AQUAMARINE, ?RotationSpeed : Float = 0.0, ?Debug : Bool = false) : Void
+    public function new(Size : Int, 
+                        ?Name : String = "Unknown", 
+                        ?Color : Int = FlxColor.AQUAMARINE, 
+                        ?RotationSpeed : Float = 0.0, 
+                        ?RotationDirection : Int = 1,
+                        ?Debug : Bool = false) : Void
     {
         super();
 
@@ -33,6 +39,7 @@ class PlanetaryBody
         name = Name;
         color = Color;
         rotation_speed = RotationSpeed;
+        rotation_direction = RotationDirection;
 
         _sprite = new FlxSprite(FlxG.width / 2, FlxG.height / 2);
         _sprite.makeGraphic(size, size, FlxColor.TRANSPARENT, true);
@@ -81,7 +88,7 @@ class PlanetaryBody
         if (orbit_distance <= 0)
             return;
 
-        angular_position += rotation_speed;
+        angular_position += rotation_speed * rotation_direction;
         if (angular_position > 359)
             angular_position = 0;
         destination_point = FlxAngle.rotatePoint(_center_position.x, _center_position.y - orbit_distance - size, _center_position.x, _center_position.y, angular_position);
