@@ -8,6 +8,7 @@ import flixel.tweens.FlxTween;
 import flixel.util.FlxAngle;
 import flixel.util.FlxColor;
 import flixel.util.FlxPoint;
+import flixel.util.FlxSpriteUtil.LineStyle;
 using flixel.util.FlxSpriteUtil;
 
 class PlanetaryBody
@@ -16,7 +17,7 @@ class PlanetaryBody
     public var name : String = "Unknown";
     public var parent : PlanetaryBody = null;
     public var children : FlxTypedGroup<PlanetaryBody> = null;
-    public var orbit_distance : Int = -1;
+    public var orbit_distance : Float = -1;
     public var size : Int = -1;
     public var color : Int = FlxColor.AQUAMARINE;
     public var angular_position : Float = 0;
@@ -25,6 +26,7 @@ class PlanetaryBody
 
     private var _sprite : FlxSprite = null;
     private var _center_sprite : FlxSprite = null;
+    private var _orbit_sprite : FlxSprite = null;
 
     public function new(Size : Int, 
                         ?Name : String = "Unknown", 
@@ -70,7 +72,9 @@ class PlanetaryBody
         rotate();
 
         children.forEach(function(body : PlanetaryBody) : Void {
-                body.set_center_position(FlxPoint.weak(_position.x + size / 2, _position.y + size / 2));
+                //body.set_center_position(FlxPoint.weak(_position.x + size / 2, _position.y + size / 2));
+                //body.set_center_position(FlxPoint.weak(_center_position.x, _center_position.y));
+                body.set_position(FlxPoint.weak(_center_position.x - body.orbit_distance + body.size / 2, _center_position.y + body.size / 2));
 
                 body.update();
             });
@@ -95,16 +99,28 @@ class PlanetaryBody
     
         set_position(destination_point);
 
-        trace('angle: ${angular_position} $destination_point');
+        //trace('angle: ${angular_position} $destination_point');
     }
 
-    public function add_child(Child : PlanetaryBody, Orbit : Int) : Void
+    public function add_child(Child : PlanetaryBody, Orbit : Float) : Void
     {
-        Child.orbit_distance = Orbit;
-        Child.set_center_position(FlxPoint.weak(_center_position.x + size / 2, _center_position.y + size / 2));
+        //Child.orbit_distance = Orbit;
+        //Child.set_center_position(FlxPoint.weak(_center_position.x + size / 2, _center_position.y + size / 2));
         Child.set_position(FlxPoint.weak(_center_position.x - Orbit + Child.size / 2, _center_position.y + Child.size / 2));
-        Child.parent = this;
+        Child.set_orbit(this, Orbit + Child.size / 2);
+
         children.add(Child);
+    }
+
+    public function set_orbit(Parent : PlanetaryBody, Orbit : Float)
+    {
+        orbit_distance = Orbit;
+
+        _orbit_sprite = new FlxSprite(Parent.center_position.x - orbit_distance*2, Parent.center_position.y - orbit_distance*2);
+        _orbit_sprite.makeGraphic(cast orbit_distance * 4, cast orbit_distance * 4, FlxColor.TRANSPARENT, true);
+        _orbit_sprite.drawCircle(orbit_distance * 2, orbit_distance * 2, orbit_distance * 2, FlxColor.TRANSPARENT, { color: FlxColor.WHITE, thickness: 1 }, { color: FlxColor.TRANSPARENT });
+        trace('ehhhhh ${_orbit_sprite}');
+        add(_orbit_sprite);
     }
 
     public var position(get_position, set_position) : FlxPoint;

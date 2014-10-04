@@ -14,8 +14,9 @@ import flixel.util.FlxPoint;
  */
 class PlayState extends FlxState
 {
-    private var _test : PlanetaryBody;
-    private var _test2 : PlanetaryBody;
+    private var _sun : PlanetaryBody;
+    private var _earth : PlanetaryBody;
+    private var _mars : PlanetaryBody;
 
     /**
      * Function that is called up when to state is created to set it up. 
@@ -24,23 +25,24 @@ class PlayState extends FlxState
     {
         super.create();
 
-        _test = new PlanetaryBody(50, "Earth", FlxColor.CYAN, 0.0, 0, true);
-        _test.position = FlxPoint.weak(FlxG.width / 2, FlxG.height / 2);
+        _sun = new PlanetaryBody(50, "Sun", FlxColor.YELLOW, 0.0, 0, false);
+        _sun.position = FlxPoint.weak(FlxG.width / 2, FlxG.height / 2);
 
-        var moon1 = new PlanetaryBody(10, "The Moon", FlxColor.WHITE, 1.0, 1, true);
-        _test.add_child(moon1, 60);
+        _earth = new PlanetaryBody(20, "Earth", FlxColor.CYAN, 0.25, 1, true);
+        _earth.position = FlxPoint.weak(100, 200);
 
-        var submoon1 = new PlanetaryBody(5, "Moon2", FlxColor.GREEN, 2.5, -1, true);
-        moon1.add_child(submoon1, 20);
+        var moon = new PlanetaryBody(5, "The Moon", FlxColor.WHITE, 0.5, 1, true);
+        _earth.add_child(moon, 15);
 
-        _test2 = new PlanetaryBody(100, "Mars", FlxColor.MAROON, 0.0, 0, true);
-        _test2.position = FlxPoint.weak(200, 300);
+        _mars = new PlanetaryBody(30, "Mars", FlxColor.MAROON, 0.25, 1, true);
+        _mars.position = FlxPoint.weak(200, 200);
 
-        var moon2 = new PlanetaryBody(50, "Mars Moon", FlxColor.WHITE, 0.5, -1, true);
-        _test2.add_child(moon2, 80);
+        _sun.add_child(_earth, 30);
+        _sun.add_child(_mars, 50);
 
-        add(_test);
-        add(_test2);
+        add(_sun);
+        add(_earth);
+        add(_mars);
     }
     
     /**
