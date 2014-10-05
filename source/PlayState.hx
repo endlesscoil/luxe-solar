@@ -26,19 +26,19 @@ class PlayState extends FlxState
         super.create();
 
         _sun = new PlanetaryBody(50, "Sun", FlxColor.YELLOW, 0.0, 0, false);
-        _sun.position = FlxPoint.weak(FlxG.width / 2, FlxG.height / 2);
+        _sun.center_position = FlxPoint.weak(FlxG.width / 2, FlxG.height / 2);
 
         _earth = new PlanetaryBody(20, "Earth", FlxColor.CYAN, 0.25, 1, true);
-        _earth.position = FlxPoint.weak(100, 200);
+        //_earth.position = FlxPoint.weak(100, 200);
 
-        var moon = new PlanetaryBody(5, "The Moon", FlxColor.WHITE, 0.5, 1, true);
+        var moon = new PlanetaryBody(5, "The Moon", FlxColor.WHITE, 0.5, -1, true);
+
+        _mars = new PlanetaryBody(30, "Mars", FlxColor.MAROON, 0.99, 1, true);
+        //_mars.position = FlxPoint.weak(200, 200);
+
+        _sun.add_child(_earth, 60);
+        _sun.add_child(_mars, 100);
         _earth.add_child(moon, 15);
-
-        _mars = new PlanetaryBody(30, "Mars", FlxColor.MAROON, 0.25, 1, true);
-        _mars.position = FlxPoint.weak(200, 200);
-
-        _sun.add_child(_earth, 30);
-        _sun.add_child(_mars, 50);
 
         add(_sun);
         add(_earth);

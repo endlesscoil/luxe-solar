@@ -25,10 +25,11 @@ class PlanetaryBody
     public var rotation_direction : Int = 1;
 
     private var _sprite : FlxSprite = null;
+    private var _pos_sprite : FlxSprite = null;
     private var _center_sprite : FlxSprite = null;
     private var _orbit_sprite : FlxSprite = null;
 
-    public function new(Size : Int, 
+    public function new(Size : Int,
                         ?Name : String = "Unknown", 
                         ?Color : Int = FlxColor.AQUAMARINE, 
                         ?RotationSpeed : Float = 0.0, 
@@ -43,17 +44,19 @@ class PlanetaryBody
         rotation_speed = RotationSpeed;
         rotation_direction = RotationDirection;
 
-        _sprite = new FlxSprite(FlxG.width / 2, FlxG.height / 2);
+        _sprite = new FlxSprite();
         _sprite.makeGraphic(size, size, FlxColor.TRANSPARENT, true);
         _sprite.drawCircle(size / 2, size / 2, size / 2, color);
         add(_sprite);
 
         if (Debug)
         {
+            _pos_sprite = new FlxSprite();
+            _pos_sprite.makeGraphic(3, 3, FlxColor.RED, true);
+            add(_pos_sprite);
+
             _center_sprite = new FlxSprite();
             _center_sprite.makeGraphic(3, 3, FlxColor.RED, true);
-            //_center_sprite.x = _center_position.x;
-            //_center_sprite.y = _center_position.y;
             add(_center_sprite);
         }
 
@@ -67,16 +70,14 @@ class PlanetaryBody
     {
         super.update();
 
-        //trace('$name: ${_sprite.x}, ${_sprite.y} - ${_position} ${_center_position}');
-
         rotate();
 
         children.forEach(function(body : PlanetaryBody) : Void {
                 //body.set_center_position(FlxPoint.weak(_position.x + size / 2, _position.y + size / 2));
                 //body.set_center_position(FlxPoint.weak(_center_position.x, _center_position.y));
-                body.set_position(FlxPoint.weak(_center_position.x - body.orbit_distance + body.size / 2, _center_position.y + body.size / 2));
+                //body.set_position(FlxPoint.weak(_center_position.x - body.orbit_distance - body.size / 2, _center_position.y - body.size / 2));
 
-                body.update();
+                //body.update();
             });
     }
 
@@ -95,19 +96,17 @@ class PlanetaryBody
         angular_position += rotation_speed * rotation_direction;
         if (angular_position > 359)
             angular_position = 0;
-        destination_point = FlxAngle.rotatePoint(_center_position.x, _center_position.y - orbit_distance - size, _center_position.x, _center_position.y, angular_position);
+        destination_point = FlxAngle.rotatePoint(parent.center_position.x - orbit_distance, parent.center_position.y, parent.center_position.x, parent.center_position.y, angular_position);
     
-        set_position(destination_point);
-
-        //trace('angle: ${angular_position} $destination_point');
+        set_center_position(destination_point);
     }
 
     public function add_child(Child : PlanetaryBody, Orbit : Float) : Void
     {
-        //Child.orbit_distance = Orbit;
-        //Child.set_center_position(FlxPoint.weak(_center_position.x + size / 2, _center_position.y + size / 2));
-        Child.set_position(FlxPoint.weak(_center_position.x - Orbit + Child.size / 2, _center_position.y + Child.size / 2));
-        Child.set_orbit(this, Orbit + Child.size / 2);
+        Child.set_center_position(FlxPoint.weak(_center_position.x - Orbit - size / 2, _center_position.y - Orbit - size / 2));
+        Child.set_orbit(this, Orbit);
+
+        trace('add_child: ${Child.name} - orbit=$Orbit, center=${Child.center_position}');
 
         children.add(Child);
     }
@@ -115,26 +114,15 @@ class PlanetaryBody
     public function set_orbit(Parent : PlanetaryBody, Orbit : Float)
     {
         orbit_distance = Orbit;
+        parent = Parent;
 
-        _orbit_sprite = new FlxSprite(Parent.center_position.x - orbit_distance*2, Parent.center_position.y - orbit_distance*2);
-        _orbit_sprite.makeGraphic(cast orbit_distance * 4, cast orbit_distance * 4, FlxColor.TRANSPARENT, true);
-        _orbit_sprite.drawCircle(orbit_distance * 2, orbit_distance * 2, orbit_distance * 2, FlxColor.TRANSPARENT, { color: FlxColor.WHITE, thickness: 1 }, { color: FlxColor.TRANSPARENT });
-        trace('ehhhhh ${_orbit_sprite}');
+        _orbit_sprite = new FlxSprite(parent.center_position.x - Orbit, parent.center_position.y - Orbit);
+        _orbit_sprite.makeGraphic(cast orbit_distance * 2, cast orbit_distance * 2, FlxColor.TRANSPARENT, true);
+        _orbit_sprite.drawCircle(orbit_distance, orbit_distance, orbit_distance, FlxColor.TRANSPARENT, { color: FlxColor.WHITE, thickness: 1 }, { color: FlxColor.TRANSPARENT });
+        
+        trace('set_orbit: ${name} - orbit=$Orbit - sprite pos=${_orbit_sprite.x}, ${_orbit_sprite.y} size=${_orbit_sprite.width}, ${_orbit_sprite.height}, radius=${orbit_distance*2}');
+
         add(_orbit_sprite);
-    }
-
-    public var position(get_position, set_position) : FlxPoint;
-    private var _position : FlxPoint = FlxPoint.weak(0, 0);
-    
-    function get_position() : FlxPoint { return _position; }
-    function set_position(value : FlxPoint) : FlxPoint
-    {
-        _sprite.x = value.x;
-        _sprite.y = value.y;
-
-        center_position = FlxPoint.weak(value.x + size / 2, value.y + size / 2);
-
-        return _position = value;
     }
 
     public var center_position(get_center_position, set_center_position):FlxPoint;
@@ -143,6 +131,15 @@ class PlanetaryBody
     function get_center_position():FlxPoint { return _center_position; }
     function set_center_position(value:FlxPoint):FlxPoint
     {
+        _sprite.x = value.x - size / 2;
+        _sprite.y = value.y - size / 2;
+
+        if (_pos_sprite != null)
+        {
+            _pos_sprite.x = value.x - size / 2;
+            _pos_sprite.y = value.y - size / 2;
+        }
+
         if (_center_sprite != null)
         {
             _center_sprite.x = value.x;
