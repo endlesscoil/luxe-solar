@@ -44,9 +44,16 @@ class PlanetaryBody
         rotation_speed = RotationSpeed;
         rotation_direction = RotationDirection;
 
+        _orbit_sprite = new FlxSprite();
+        //_orbit_sprite.makeGraphic(1, 1, FlxColor.TRANSPARENT, true);
+        add(_orbit_sprite);
+
         _sprite = new FlxSprite();
         _sprite.makeGraphic(size, size, FlxColor.TRANSPARENT, true);
         _sprite.drawCircle(size / 2, size / 2, size / 2, color);
+
+        children = new FlxTypedGroup<PlanetaryBody>();
+        add(children);
         add(_sprite);
 
         if (Debug)
@@ -59,10 +66,7 @@ class PlanetaryBody
             _center_sprite.makeGraphic(3, 3, FlxColor.RED, true);
             add(_center_sprite);
         }
-
-        children = new FlxTypedGroup<PlanetaryBody>();
-        add(children);
-
+        
         trace('$name ${_sprite}');
     }
 
@@ -107,7 +111,6 @@ class PlanetaryBody
         Child.set_orbit(this, Orbit);
 
         trace('add_child: ${Child.name} - orbit=$Orbit, center=${Child.center_position}');
-
         children.add(Child);
     }
 
@@ -116,13 +119,14 @@ class PlanetaryBody
         orbit_distance = Orbit;
         parent = Parent;
 
-        _orbit_sprite = new FlxSprite(parent.center_position.x - Orbit, parent.center_position.y - Orbit);
-        _orbit_sprite.makeGraphic(cast orbit_distance * 2, cast orbit_distance * 2, FlxColor.TRANSPARENT, true);
-        _orbit_sprite.drawCircle(orbit_distance, orbit_distance, orbit_distance, FlxColor.TRANSPARENT, { color: FlxColor.WHITE, thickness: 1 }, { color: FlxColor.TRANSPARENT });
-        
+        _orbit_sprite.x = parent.center_position.x - Orbit;
+        _orbit_sprite.y = parent.center_position.y - Orbit;
+        _orbit_sprite.makeGraphic(cast orbit_distance * 2 + 2, cast orbit_distance * 2 + 2, FlxColor.TRANSPARENT, true);
+        _orbit_sprite.drawCircle(orbit_distance + 1, orbit_distance + 1, orbit_distance, FlxColor.TRANSPARENT, { color: FlxColor.GRAY, thickness: 1 }, { color: FlxColor.TRANSPARENT });
+
         trace('set_orbit: ${name} - orbit=$Orbit - sprite pos=${_orbit_sprite.x}, ${_orbit_sprite.y} size=${_orbit_sprite.width}, ${_orbit_sprite.height}, radius=${orbit_distance*2}');
 
-        add(_orbit_sprite);
+//        add(_orbit_sprite);
     }
 
     public var center_position(get_center_position, set_center_position):FlxPoint;
@@ -144,6 +148,12 @@ class PlanetaryBody
         {
             _center_sprite.x = value.x;
             _center_sprite.y = value.y;
+        }
+
+        if (_orbit_sprite != null && parent != null && parent.rotation_speed > 0)
+        {
+            _orbit_sprite.x = parent.center_position.x - orbit_distance - 1;
+            _orbit_sprite.y = parent.center_position.y - orbit_distance - 1;
         }
 
         return _center_position = value;
