@@ -14,8 +14,8 @@ using flixel.util.FlxSpriteUtil;
 class PlanetaryBody
     extends FlxGroup 
 {
-    public static var AU = 30;
-    public static var BASE_SIZE = 10;
+    public static var AU = 100;
+    public static var BASE_SIZE = 20;
     public static var PLANETS = {
         mercury: { distance: AU * 0.39, size: BASE_SIZE * 0.38 },
         venus: { distance: AU * 0.72, size: BASE_SIZE * 0.95 },
