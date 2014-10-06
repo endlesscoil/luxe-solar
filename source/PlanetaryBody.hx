@@ -136,7 +136,7 @@ class PlanetaryBody
         _orbit_sprite.x = parent.center_position.x - Orbit;
         _orbit_sprite.y = parent.center_position.y - Orbit;
         _orbit_sprite.makeGraphic(cast orbit_distance * 2 + 2, cast orbit_distance * 2 + 2, FlxColor.TRANSPARENT, true);
-        _orbit_sprite.drawCircle(orbit_distance + 1, orbit_distance + 1, orbit_distance, FlxColor.TRANSPARENT, { color: FlxColor.GRAY, thickness: 1 }, { color: FlxColor.TRANSPARENT });
+        _orbit_sprite.drawCircle(orbit_distance + 1, orbit_distance + 1, orbit_distance, FlxColor.TRANSPARENT, { color: FlxColor.GRAY, thickness: 2 }, { color: FlxColor.TRANSPARENT });
 
         trace('set_orbit: ${name} - orbit=$Orbit - sprite pos=${_orbit_sprite.x}, ${_orbit_sprite.y} size=${_orbit_sprite.width}, ${_orbit_sprite.height}, radius=${orbit_distance*2}');
 
