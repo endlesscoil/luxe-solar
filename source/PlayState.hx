@@ -40,19 +40,19 @@ class PlayState extends FlxState
         FlxG.camera.antialiasing = true;
 
         var debug : Bool = true;
-        
+
         _sun = new PlanetaryBody(30, "Sun", FlxColor.YELLOW, 0.0, 0, debug);
         _sun.center_position = FlxPoint.weak(FlxG.width / 2, FlxG.height / 2);
 
-        _mercury = new PlanetaryBody(PlanetaryBody.PLANETS.mercury.size, "Mercury", FlxColor.WHITE, 0.25, 1, true);
-        _venus = new PlanetaryBody(PlanetaryBody.PLANETS.venus.size, "Venus", FlxColor.WHITE, 0.25, 1, true);
-        _earth = new PlanetaryBody(PlanetaryBody.PLANETS.earth.size, "Earth", FlxColor.WHITE, 0.25, 1, true);
-        _mars = new PlanetaryBody(PlanetaryBody.PLANETS.mars.size, "Mars", FlxColor.WHITE, 0.25, 1, true);
-        _jupiter = new PlanetaryBody(PlanetaryBody.PLANETS.jupiter.size, "Jupiter", FlxColor.WHITE, 0.25, 1, true);
-        _saturn = new PlanetaryBody(PlanetaryBody.PLANETS.saturn.size, "Saturn", FlxColor.WHITE, 0.25, 1, true);
-        _uranus = new PlanetaryBody(PlanetaryBody.PLANETS.uranus.size, "Uranus", FlxColor.WHITE, 0.25, 1, true);
-        _neptune = new PlanetaryBody(PlanetaryBody.PLANETS.neptune.size, "Neptune", FlxColor.WHITE, 0.25, 1, true);
-        _pluto = new PlanetaryBody(PlanetaryBody.PLANETS.pluto.size, "Pluto", FlxColor.WHITE, 0.25, 1, true);
+        _mercury = new PlanetaryBody(PlanetaryBody.PLANETS.mercury.size, "Mercury", FlxColor.WHITE, PlanetaryBody.PLANETS.mercury.period, 1, true);
+        _venus = new PlanetaryBody(PlanetaryBody.PLANETS.venus.size, "Venus", FlxColor.WHITE, PlanetaryBody.PLANETS.venus.period, 1, true);
+        _earth = new PlanetaryBody(PlanetaryBody.PLANETS.earth.size, "Earth", FlxColor.WHITE, PlanetaryBody.PLANETS.earth.period, 1, true);
+        _mars = new PlanetaryBody(PlanetaryBody.PLANETS.mars.size, "Mars", FlxColor.WHITE, PlanetaryBody.PLANETS.mars.period, 1, true);
+        _jupiter = new PlanetaryBody(PlanetaryBody.PLANETS.jupiter.size, "Jupiter", FlxColor.WHITE, PlanetaryBody.PLANETS.jupiter.period, 1, true);
+        _saturn = new PlanetaryBody(PlanetaryBody.PLANETS.saturn.size, "Saturn", FlxColor.WHITE, PlanetaryBody.PLANETS.saturn.period, 1, true);
+        _uranus = new PlanetaryBody(PlanetaryBody.PLANETS.uranus.size, "Uranus", FlxColor.WHITE, PlanetaryBody.PLANETS.uranus.period, 1, true);
+        _neptune = new PlanetaryBody(PlanetaryBody.PLANETS.neptune.size, "Neptune", FlxColor.WHITE, PlanetaryBody.PLANETS.neptune.period, 1, true);
+        _pluto = new PlanetaryBody(PlanetaryBody.PLANETS.pluto.size, "Pluto", FlxColor.WHITE, PlanetaryBody.PLANETS.pluto.period, 1, true);
 
 /*
         _earth = new PlanetaryBody(20, "Earth", FlxColor.CYAN, 0.25, 1, debug);

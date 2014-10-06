@@ -16,16 +16,17 @@ class PlanetaryBody
 {
     public static var AU = 100;
     public static var BASE_SIZE = 20;
+    public static var BASE_ORBITAL_PERIOD = 1;
     public static var PLANETS = {
-        mercury: { distance: AU * 0.39, size: BASE_SIZE * 0.38 },
-        venus: { distance: AU * 0.72, size: BASE_SIZE * 0.95 },
-        earth: { distance: AU, size: BASE_SIZE },
-        mars: { distance: AU * 1.52, size: BASE_SIZE * 0.53 },
-        jupiter: { distance: AU * 5.20, size: BASE_SIZE * 11.20 },
-        saturn: { distance: AU * 9.58, size: BASE_SIZE * 9.45 },
-        uranus: { distance: AU * 19.23, size: BASE_SIZE * 4.00 },
-        neptune: { distance: AU * 30.10, size: BASE_SIZE * 3.88 },
-        pluto: { distance: AU * 39.3, size: BASE_SIZE }
+        mercury: { distance: AU * 0.39, size: BASE_SIZE * 0.38, period: BASE_ORBITAL_PERIOD / 0.24 },
+        venus: { distance: AU * 0.72, size: BASE_SIZE * 0.95, period: BASE_ORBITAL_PERIOD / 0.62 },
+        earth: { distance: AU, size: BASE_SIZE, period: BASE_ORBITAL_PERIOD },
+        mars: { distance: AU * 1.52, size: BASE_SIZE * 0.53, period: BASE_ORBITAL_PERIOD / 1.88 },
+        jupiter: { distance: AU * 5.20, size: BASE_SIZE * 11.20, period: BASE_ORBITAL_PERIOD / 11.86 },
+        saturn: { distance: AU * 9.58, size: BASE_SIZE * 9.45, period: BASE_ORBITAL_PERIOD / 29.46 },
+        uranus: { distance: AU * 19.23, size: BASE_SIZE * 4.00, period: BASE_ORBITAL_PERIOD / 84.01 },
+        neptune: { distance: AU * 30.10, size: BASE_SIZE * 3.88, period: BASE_ORBITAL_PERIOD / 164.8 },
+        pluto: { distance: AU * 39.3, size: BASE_SIZE * 0.18, period: BASE_ORBITAL_PERIOD / 247.7 }
     }
 
     public var name : String = "Unknown";
