@@ -14,11 +14,25 @@ using flixel.util.FlxSpriteUtil;
 class PlanetaryBody
     extends FlxGroup 
 {
+    public static var AU = 30;
+    public static var BASE_SIZE = 10;
+    public static var PLANETS = {
+        mercury: { distance: AU * 0.39, size: BASE_SIZE * 0.38 },
+        venus: { distance: AU * 0.72, size: BASE_SIZE * 0.95 },
+        earth: { distance: AU, size: BASE_SIZE },
+        mars: { distance: AU * 1.52, size: BASE_SIZE * 0.53 },
+        jupiter: { distance: AU * 5.20, size: BASE_SIZE * 11.20 },
+        saturn: { distance: AU * 9.58, size: BASE_SIZE * 9.45 },
+        uranus: { distance: AU * 19.23, size: BASE_SIZE * 4.00 },
+        neptune: { distance: AU * 30.10, size: BASE_SIZE * 3.88 },
+        pluto: { distance: AU * 39.3, size: BASE_SIZE }
+    }
+
     public var name : String = "Unknown";
     public var parent : PlanetaryBody = null;
     public var children : FlxTypedGroup<PlanetaryBody> = null;
     public var orbit_distance : Float = -1;
-    public var size : Int = -1;
+    public var size : Float = -1;
     public var color : Int = FlxColor.AQUAMARINE;
     public var angular_position : Float = 0;
     public var rotation_speed : Float = 0.0;
@@ -29,7 +43,7 @@ class PlanetaryBody
     private var _center_sprite : FlxSprite = null;
     private var _orbit_sprite : FlxSprite = null;
 
-    public function new(Size : Int,
+    public function new(Size : Float,
                         ?Name : String = "Unknown", 
                         ?Color : Int = FlxColor.AQUAMARINE, 
                         ?RotationSpeed : Float = 0.0, 
@@ -49,7 +63,7 @@ class PlanetaryBody
         add(_orbit_sprite);
 
         _sprite = new FlxSprite();
-        _sprite.makeGraphic(size, size, FlxColor.TRANSPARENT, true);
+        _sprite.makeGraphic(cast size, cast size, FlxColor.TRANSPARENT, true);
         _sprite.drawCircle(size / 2, size / 2, size / 2, color);
 
         children = new FlxTypedGroup<PlanetaryBody>();
