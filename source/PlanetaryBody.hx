@@ -10,6 +10,7 @@ import flixel.util.FlxColor;
 import flixel.util.FlxPoint;
 import flixel.util.FlxSpriteUtil.LineStyle;
 using flixel.util.FlxSpriteUtil;
+using MySpriteUtil.MySpriteUtil;
 
 class PlanetaryBody
     extends FlxGroup 
@@ -59,9 +60,8 @@ class PlanetaryBody
         rotation_speed = RotationSpeed;
         rotation_direction = RotationDirection;
 
-        _orbit_sprite = new FlxSprite();
         //_orbit_sprite.makeGraphic(1, 1, FlxColor.TRANSPARENT, true);
-        add(_orbit_sprite);
+        //add(_orbit_sprite);
 
         _sprite = new FlxSprite();
         _sprite.makeGraphic(cast size, cast size, FlxColor.TRANSPARENT, true);
@@ -123,9 +123,23 @@ class PlanetaryBody
     public function add_child(Child : PlanetaryBody, Orbit : Float) : Void
     {
         Child.set_center_position(FlxPoint.weak(_center_position.x - Orbit - size / 2, _center_position.y - Orbit - size / 2));
-        Child.set_orbit(this, Orbit);
+        Child.orbit_distance = Orbit;
+        Child.parent = this;
 
-        trace('add_child: ${Child.name} - orbit=$Orbit, center=${Child.center_position}');
+        if (_orbit_sprite == null)
+        {
+            _orbit_sprite = new FlxSprite();
+            _orbit_sprite.makeGraphic(8000, 8000, FlxColor.TRANSPARENT, true);
+
+            //trace('orbit sprite: size=${_orbit_sprite.width},${_orbit_sprite.height}');
+            _orbit_sprite.setPosition(-4000 + FlxG.width/2, -4000 + FlxG.height/2);
+
+            add(_orbit_sprite);
+        }
+
+        _orbit_sprite.drawCircleClean(_orbit_sprite.width / 2, _orbit_sprite.height / 2, Orbit);
+
+        //trace('add_child: ${Child.name} - orbit=$Orbit, center=${Child.center_position}');
         children.add(Child);
     }
 
@@ -136,8 +150,9 @@ class PlanetaryBody
 
         _orbit_sprite.x = parent.center_position.x - Orbit;
         _orbit_sprite.y = parent.center_position.y - Orbit;
-        _orbit_sprite.makeGraphic(cast orbit_distance * 2 + 2, cast orbit_distance * 2 + 2, FlxColor.TRANSPARENT, true);
-        _orbit_sprite.drawCircle(orbit_distance + 1, orbit_distance + 1, orbit_distance, FlxColor.TRANSPARENT, { color: FlxColor.GRAY, thickness: 2 }, { color: FlxColor.TRANSPARENT });
+
+        //
+        //
 
         trace('set_orbit: ${name} - orbit=$Orbit - sprite pos=${_orbit_sprite.x}, ${_orbit_sprite.y} size=${_orbit_sprite.width}, ${_orbit_sprite.height}, radius=${orbit_distance*2}');
 
