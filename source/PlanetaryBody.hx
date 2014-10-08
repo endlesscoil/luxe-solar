@@ -15,19 +15,31 @@ using MySpriteUtil.MySpriteUtil;
 class PlanetaryBody
     extends FlxGroup 
 {
-    public static var AU = 100;
-    public static var BASE_SIZE = 20;
+    public static var AU = 50;
+    public static var BASE_SIZE = 40;
     public static var BASE_ORBITAL_PERIOD = 1;
-    public static var PLANETS = {
+/*    public static var PLANETS = {
         mercury: { distance: AU * 0.39, size: BASE_SIZE * 0.38, period: BASE_ORBITAL_PERIOD / 0.24 },
         venus: { distance: AU * 0.72, size: BASE_SIZE * 0.95, period: BASE_ORBITAL_PERIOD / 0.62 },
         earth: { distance: AU, size: BASE_SIZE, period: BASE_ORBITAL_PERIOD },
         mars: { distance: AU * 1.52, size: BASE_SIZE * 0.53, period: BASE_ORBITAL_PERIOD / 1.88 },
-        jupiter: { distance: AU * 5.20, size: BASE_SIZE * 11.20, period: BASE_ORBITAL_PERIOD / 11.86 },
-        saturn: { distance: AU * 9.58, size: BASE_SIZE * 9.45, period: BASE_ORBITAL_PERIOD / 29.46 },
-        uranus: { distance: AU * 19.23, size: BASE_SIZE * 4.00, period: BASE_ORBITAL_PERIOD / 84.01 },
-        neptune: { distance: AU * 30.10, size: BASE_SIZE * 3.88, period: BASE_ORBITAL_PERIOD / 164.8 },
-        pluto: { distance: AU * 39.3, size: BASE_SIZE * 0.18, period: BASE_ORBITAL_PERIOD / 247.7 }
+        jupiter: { distance: AU * 5.20, size: BASE_SIZE * 11.20 * 0.25, period: BASE_ORBITAL_PERIOD / 11.86 * 0.25 },
+        saturn: { distance: AU * 9.58, size: BASE_SIZE * 9.45 * 0.25, period: BASE_ORBITAL_PERIOD / 29.46 * 0.25 },
+        uranus: { distance: AU * 19.23, size: BASE_SIZE * 4.00, period: BASE_ORBITAL_PERIOD / 84.01 * 0.25 },
+        neptune: { distance: AU * 30.10, size: BASE_SIZE * 3.88, period: BASE_ORBITAL_PERIOD / 164.8 * 0.25 },
+        pluto: { distance: AU * 39.3, size: BASE_SIZE * 0.18, period: BASE_ORBITAL_PERIOD / 247.7 * 0.25 }
+    }*/
+
+    public static var PLANETS = {
+        mercury: { distance: AU * 1, size: BASE_SIZE * 0.5 * 0.5, period: BASE_ORBITAL_PERIOD / 0.24 },
+        venus: { distance: AU * 2, size: BASE_SIZE * 0.5 * 0.95, period: BASE_ORBITAL_PERIOD / 0.62 },
+        earth: { distance: AU * 3, size: BASE_SIZE * 0.5, period: BASE_ORBITAL_PERIOD },
+        mars: { distance: AU * 4, size: BASE_SIZE * 0.5 * 0.7, period: BASE_ORBITAL_PERIOD / 1.88 },
+        jupiter: { distance: AU * 5, size: BASE_SIZE, period: BASE_ORBITAL_PERIOD / 11.86 },
+        saturn: { distance: AU * 6, size: BASE_SIZE * 0.9, period: BASE_ORBITAL_PERIOD / 29.46 },
+        uranus: { distance: AU * 7, size: BASE_SIZE * 0.8, period: BASE_ORBITAL_PERIOD / 84.01 },
+        neptune: { distance: AU * 8, size: BASE_SIZE * 0.7, period: BASE_ORBITAL_PERIOD / 164.8 },
+        pluto: { distance: AU * 9, size: BASE_SIZE * 0.5 * 0.4, period: BASE_ORBITAL_PERIOD / 247.7 }
     }
 
     public var name : String = "Unknown";
@@ -91,13 +103,13 @@ class PlanetaryBody
 
         rotate();
 
-        children.forEach(function(body : PlanetaryBody) : Void {
+/*        children.forEach(function(body : PlanetaryBody) : Void {
                 //body.set_center_position(FlxPoint.weak(_position.x + size / 2, _position.y + size / 2));
                 //body.set_center_position(FlxPoint.weak(_center_position.x, _center_position.y));
                 //body.set_position(FlxPoint.weak(_center_position.x - body.orbit_distance - body.size / 2, _center_position.y - body.size / 2));
 
                 //body.update();
-            });
+            });*/
     }
 
     public override function destroy() : Void
@@ -117,6 +129,7 @@ class PlanetaryBody
             angular_position = 0;
         destination_point = FlxAngle.rotatePoint(parent.center_position.x - orbit_distance, parent.center_position.y, parent.center_position.x, parent.center_position.y, angular_position);
     
+        // NOTE: Seems to be a memory leak in flash.. I have a suspicion it's here.  Try FlxPoint.weak().
         set_center_position(destination_point);
     }
 
