@@ -6,6 +6,7 @@ import flixel.FlxState;
 import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.util.FlxColor;
+import flixel.util.FlxDestroyUtil;
 import flixel.util.FlxMath;
 import flixel.util.FlxPoint;
 
@@ -38,60 +39,25 @@ class PlayState extends FlxState
         super.create();
 
         FlxG.camera.antialiasing = true;
-        setZoom2(0.8);
+        setZoom(0.8);
 
         var debug : Bool = false;
 
-        _sun = new PlanetaryBody(30, "Sun", FlxColor.YELLOW, 0.0, 0, debug);
+        _sun = new PlanetaryBody({ distance: -1, size: 30, period: 0, direction: 0 }, debug);
         _sun.center_position = FlxPoint.weak(FlxG.width / 2, FlxG.height / 2);
+        _sun.color = FlxColor.YELLOW;
 
-        _mercury = new PlanetaryBody(PlanetaryBody.PLANETS.mercury.size, "Mercury", FlxColor.GRAY, PlanetaryBody.PLANETS.mercury.period, 1, debug);
-        _venus = new PlanetaryBody(PlanetaryBody.PLANETS.venus.size, "Venus", FlxColor.WHEAT, PlanetaryBody.PLANETS.venus.period, 1, debug);
-        _earth = new PlanetaryBody(PlanetaryBody.PLANETS.earth.size, "Earth", FlxColor.CYAN, PlanetaryBody.PLANETS.earth.period, 1, debug);
-        _mars = new PlanetaryBody(PlanetaryBody.PLANETS.mars.size, "Mars", FlxColor.RED, PlanetaryBody.PLANETS.mars.period, 1, debug);
-        _jupiter = new PlanetaryBody(PlanetaryBody.PLANETS.jupiter.size, "Jupiter", FlxColor.GOLDENROD, PlanetaryBody.PLANETS.jupiter.period, 1, debug);
-        _saturn = new PlanetaryBody(PlanetaryBody.PLANETS.saturn.size, "Saturn", FlxColor.MAUVE, PlanetaryBody.PLANETS.saturn.period, 1, debug);
-        _uranus = new PlanetaryBody(PlanetaryBody.PLANETS.uranus.size, "Uranus", FlxColor.AZURE, PlanetaryBody.PLANETS.uranus.period, 1, debug);
-        _neptune = new PlanetaryBody(PlanetaryBody.PLANETS.neptune.size, "Neptune", FlxColor.AQUAMARINE, PlanetaryBody.PLANETS.neptune.period, 1, debug);
-        _pluto = new PlanetaryBody(PlanetaryBody.PLANETS.pluto.size, "Pluto", FlxColor.BROWN, PlanetaryBody.PLANETS.pluto.period, 1, debug);
-
-/*
-        _earth = new PlanetaryBody(20, "Earth", FlxColor.CYAN, 0.25, 1, debug);
-        //_earth.position = FlxPoint.weak(100, 200);
-
-        var moon = new PlanetaryBody(5, "The Moon", FlxColor.WHITE, 0.5, -1, debug);
-
-        _mars = new PlanetaryBody(30, "Mars", FlxColor.MAROON, 0.99, 1, debug);
-        //_mars.position = FlxPoint.weak(200, 200);
-
-        _sun.add_child(_earth, 60);
-        _sun.add_child(_mars, 100);
-        _earth.add_child(moon, 15);
+        _sun.create_child("Mercury", PlanetaryBody.PLANETS.mercury).color = FlxColor.GRAY;
+        _sun.create_child("Venus", PlanetaryBody.PLANETS.venus).color = FlxColor.WHEAT;
+        _sun.create_child("Earth", PlanetaryBody.PLANETS.earth).color = FlxColor.CYAN;
+        _sun.create_child("Mars", PlanetaryBody.PLANETS.mars).color = FlxColor.RED;
+        _sun.create_child("Jupiter", PlanetaryBody.PLANETS.jupiter).color = FlxColor.GOLDENROD;
+        _sun.create_child("Saturn", PlanetaryBody.PLANETS.saturn).color = FlxColor.MAUVE;
+        _sun.create_child("Uranus", PlanetaryBody.PLANETS.uranus).color = FlxColor.AZURE;
+        _sun.create_child("Neptune", PlanetaryBody.PLANETS.neptune).color = FlxColor.AQUAMARINE;
+        _sun.create_child("Pluto", PlanetaryBody.PLANETS.pluto).color = FlxColor.BROWN;
 
         add(_sun);
-        add(_earth);
-        add(_mars);
-*/
-        _sun.add_child(_mercury, PlanetaryBody.PLANETS.mercury.distance);
-        _sun.add_child(_venus, PlanetaryBody.PLANETS.venus.distance);
-        _sun.add_child(_earth, PlanetaryBody.PLANETS.earth.distance);
-        _sun.add_child(_mars, PlanetaryBody.PLANETS.mars.distance);
-        _sun.add_child(_jupiter, PlanetaryBody.PLANETS.jupiter.distance);
-        _sun.add_child(_saturn, PlanetaryBody.PLANETS.saturn.distance);
-        _sun.add_child(_uranus, PlanetaryBody.PLANETS.uranus.distance);
-        _sun.add_child(_neptune, PlanetaryBody.PLANETS.neptune.distance);
-        _sun.add_child(_pluto, PlanetaryBody.PLANETS.pluto.distance);
-
-        add(_sun);
-        add(_mercury);
-        add(_venus);
-        add(_earth);
-        add(_mars);
-        add(_jupiter);
-        add(_saturn);
-        add(_uranus);
-        add(_neptune);
-        add(_pluto);
     }
     
     /**
@@ -101,6 +67,8 @@ class PlayState extends FlxState
     override public function destroy():Void
     {
         super.destroy();
+
+        _sun = FlxDestroyUtil.destroy(_sun);
     }
 
     /**
@@ -110,19 +78,15 @@ class PlayState extends FlxState
     {
         super.update();
 
-        if (FlxG.keys.anyJustPressed(['U']))
-            FlxG.camera.scroll.x -= 10;
-
-        if (FlxG.keys.anyJustPressed(['I']))
-            FlxG.camera.scroll.x += 10;
-
+        /*
         if (FlxG.mouse.wheel > 0)
             setZoom2(FlxG.camera.zoom + .1);
         if (FlxG.mouse.wheel < 0)
             setZoom2(FlxG.camera.zoom - .1);
+        */
     }
 
-    public function setZoom2(zoom : Float)
+    public function setZoom(zoom : Float)
     {
         var center_pos : FlxPoint = FlxPoint.weak(FlxG.width / 2, FlxG.height / 2);
         var camera_width : Int = Math.ceil(FlxG.width / zoom);
