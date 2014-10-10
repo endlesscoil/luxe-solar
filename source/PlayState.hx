@@ -64,7 +64,6 @@ class PlayState extends FlxState
         _sun.children.forEach(function(Planet : PlanetaryBody) : Void {
                 draw_orbit(Planet.orbit_distance);
             });
-        
     }
     
     /**
