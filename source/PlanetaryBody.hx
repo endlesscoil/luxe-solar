@@ -10,7 +10,6 @@ import flixel.util.FlxDestroyUtil;
 import flixel.util.FlxPoint;
 
 using flixel.util.FlxSpriteUtil;
-using MySpriteUtil.MySpriteUtil;
 
 typedef PlanetSpec = { distance : Float, size: Float, period : Float, direction: Int }
 

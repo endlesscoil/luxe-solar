@@ -11,8 +11,7 @@ import flixel.util.FlxDestroyUtil;
 import flixel.util.FlxMath;
 import flixel.util.FlxPoint;
 import flixel.util.FlxSpriteUtil.LineStyle;
-
-using MySpriteUtil;
+import MySpriteUtil;
 
 /**
  * A FlxState which can be used for the actual gameplay.
@@ -95,7 +94,9 @@ class PlayState extends FlxState
 
     private function draw_orbit(Orbit : Float)
     {
-        _orbit_sprite.myDrawCircle(_orbit_sprite.width / 2, _orbit_sprite.height / 2, Orbit, FlxColor.TRANSPARENT);
+        var lineStyle : LineStyle = { color: FlxColor.GRAY & 0x55FFFFFF, thickness: 2, pixelHinting: true, scaleMode: LineScaleMode.NONE };
+        
+        MySpriteUtil.drawCircle(_orbit_sprite, _orbit_sprite.width / 2, _orbit_sprite.height / 2, Orbit, FlxColor.TRANSPARENT, lineStyle);
     }
 
     public function setZoom(zoom : Float)
