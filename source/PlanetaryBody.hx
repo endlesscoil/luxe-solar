@@ -157,23 +157,9 @@ class PlanetaryBody
         Child.parent = this;
         Child.set_center_position(FlxPoint.weak(_center_position.x - Child.orbit_distance, _center_position.y - Child.orbit_distance));
 
+        //draw_orbit(Child.orbit_distance);
         children.add(Child);
-        draw_orbit(Child.orbit_distance);
-    }
-
-    private function draw_orbit(Orbit : Float)
-    {
-        if (_orbit_sprite == null)
-        {
-            _orbit_sprite = new FlxSprite();
-            // TODO: Fix me.. definitely need to make this sane.
-            _orbit_sprite.makeGraphic(8000, 8000, FlxColor.TRANSPARENT, true);
-            _orbit_sprite.setPosition(-4000 + FlxG.width/2, -4000 + FlxG.height/2);
-
-            add(_orbit_sprite);
-        }
-
-        _orbit_sprite.drawCircleClean(_orbit_sprite.width / 2, _orbit_sprite.height / 2, Orbit);
+        //add(children);
     }
 
     private function create_graphic() : Void

@@ -1,5 +1,6 @@
 package ;
 
+import flash.display.LineScaleMode;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
@@ -9,6 +10,9 @@ import flixel.util.FlxColor;
 import flixel.util.FlxDestroyUtil;
 import flixel.util.FlxMath;
 import flixel.util.FlxPoint;
+import flixel.util.FlxSpriteUtil.LineStyle;
+
+using MySpriteUtil;
 
 /**
  * A FlxState which can be used for the actual gameplay.
@@ -20,16 +24,8 @@ class PlayState extends FlxState
     static var LEVEL_MIN_Y = -768;
     static var LEVEL_MAX_Y = 768*2;
 
+    private var _orbit_sprite : FlxSprite;
     private var _sun : PlanetaryBody;
-    private var _mercury : PlanetaryBody;
-    private var _venus : PlanetaryBody;
-    private var _earth : PlanetaryBody;
-    private var _mars : PlanetaryBody;
-    private var _jupiter : PlanetaryBody;
-    private var _saturn : PlanetaryBody;
-    private var _uranus : PlanetaryBody;
-    private var _neptune : PlanetaryBody;
-    private var _pluto : PlanetaryBody;
 
     /**
      * Function that is called up when to state is created to set it up. 
@@ -42,6 +38,13 @@ class PlayState extends FlxState
         setZoom(0.8);
 
         var debug : Bool = false;
+
+        _orbit_sprite = new FlxSprite();
+        // TODO: Fix me.. definitely need to make this sane.
+        _orbit_sprite.makeGraphic(8000, 8000, FlxColor.TRANSPARENT, true);
+        _orbit_sprite.setPosition(-4000 + FlxG.width/2, -4000 + FlxG.height/2);
+
+        add(_orbit_sprite);
 
         _sun = new PlanetaryBody({ distance: -1, size: 30, period: 0, direction: 0 }, debug);
         _sun.center_position = FlxPoint.weak(FlxG.width / 2, FlxG.height / 2);
@@ -58,6 +61,11 @@ class PlayState extends FlxState
         _sun.create_child("Pluto", PlanetaryBody.PLANETS.pluto).color = FlxColor.BROWN;
 
         add(_sun);
+
+        _sun.children.forEach(function(Planet : PlanetaryBody) : Void {
+                draw_orbit(Planet.orbit_distance);
+            });
+        
     }
     
     /**
@@ -69,6 +77,7 @@ class PlayState extends FlxState
         super.destroy();
 
         _sun = FlxDestroyUtil.destroy(_sun);
+        _orbit_sprite = FlxDestroyUtil.destroy(_orbit_sprite);
     }
 
     /**
@@ -78,12 +87,15 @@ class PlayState extends FlxState
     {
         super.update();
 
-        /*
         if (FlxG.mouse.wheel > 0)
-            setZoom2(FlxG.camera.zoom + .1);
+            setZoom(FlxG.camera.zoom + .1);
         if (FlxG.mouse.wheel < 0)
-            setZoom2(FlxG.camera.zoom - .1);
-        */
+            setZoom(FlxG.camera.zoom - .1);
+    }
+
+    private function draw_orbit(Orbit : Float)
+    {
+        _orbit_sprite.myDrawCircle(_orbit_sprite.width / 2, _orbit_sprite.height / 2, Orbit, FlxColor.TRANSPARENT);
     }
 
     public function setZoom(zoom : Float)
