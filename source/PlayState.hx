@@ -118,8 +118,5 @@ class PlayState extends FlxState
         FlxG.camera.width = camera_width;
         FlxG.camera.height = camera_height;
         FlxG.camera.scroll.set(scroll_x, scroll_y);
-
-        //trace('zoom=$zoom .. game WxH = ${FlxG.width}x${FlxG.height} .. camera WxH = ${FlxG.camera.width}x${FlxG.camera.height}');
-        //trace('center_pos=$center_pos .. diff=$diff_x, $diff_y');
     }
 }

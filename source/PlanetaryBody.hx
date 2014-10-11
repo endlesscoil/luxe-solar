@@ -68,14 +68,6 @@ class PlanetaryBody
 
     private var _debug : Bool = false;
 
-/*
-    public function new(Size : Float,
-                        ?Name : String = "Unknown", 
-                        ?Color : Int = FlxColor.AQUAMARINE, 
-                        ?RotationSpeed : Float = 0.0, 
-                        ?RotationDirection : Int = 1,
-                        ?Debug : Bool = false) : Void
-*/
     public function new(Spec : PlanetSpec, ?Debug : Bool = false)
     {
         super();
@@ -156,15 +148,15 @@ class PlanetaryBody
         Child.parent = this;
         Child.set_center_position(FlxPoint.weak(_center_position.x - Child.orbit_distance, _center_position.y - Child.orbit_distance));
 
-        //draw_orbit(Child.orbit_distance);
         children.add(Child);
-        //add(children);
     }
 
     private function create_graphic() : Void
     {
-        _sprite.makeGraphic(cast size, cast size, FlxColor.TRANSPARENT, true);
-        _sprite.drawCircle(size / 2, size / 2, size / 2, color);
+        _sprite = FlxDestroyUtil.destroy(_sprite);
+        _sprite = MySpriteUtil.generate_perlin_sphere(size / 2, 16, color);
+        _sprite.setPosition(center_position.x - size / 2, center_position.y - size / 2);
+        add(_sprite);
     }
 
     private function get_color() : Int { return _color; }
