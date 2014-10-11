@@ -156,6 +156,7 @@ class PlanetaryBody
         _sprite = FlxDestroyUtil.destroy(_sprite);
         _sprite = MySpriteUtil.generate_perlin_sphere(size / 2, 16, color);
         _sprite.setPosition(center_position.x - size / 2, center_position.y - size / 2);
+
         add(_sprite);
     }
 

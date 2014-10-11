@@ -1,6 +1,9 @@
 package ;
 
 import flash.display.LineScaleMode;
+import flixel.effects.particles.FlxEmitter;
+import flixel.effects.particles.FlxEmitterExt;
+import flixel.effects.particles.FlxParticle;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
@@ -25,6 +28,8 @@ class PlayState extends FlxState
 
     private var _orbit_sprite : FlxSprite;
     private var _sun : PlanetaryBody;
+    private var _sun_emitter : FlxEmitterExt;
+    //private var _particle : FlxParticle;
 
     /**
      * Function that is called up when to state is created to set it up. 
@@ -64,6 +69,30 @@ class PlayState extends FlxState
         _sun.children.forEach(function(Planet : PlanetaryBody) : Void {
                 draw_orbit(Planet.orbit_distance);
             });
+
+
+
+        _sun_emitter = new FlxEmitterExt(FlxG.width / 2, FlxG.height / 2, 500);
+        _sun_emitter.setMotion(0, 1, 0.1, 360, 5, 0.5);
+        _sun_emitter.setXSpeed(1000, 5000);
+        _sun_emitter.setYSpeed(1000, 5000);
+
+        for (i in 0..._sun_emitter.maxSize)
+        {
+            var color : UInt = FlxColor.YELLOW;
+            if (i % 2 == 0)
+                color = FlxColor.GOLDENROD;
+
+            var particle = new FlxParticle();
+            particle.makeGraphic(2, 2, color);
+            particle.visible = false;
+            _sun_emitter.add(particle);
+        }
+        
+        //_sun_emitter.makeParticles(particle, 50);
+
+        _sun_emitter.start(false, -1, 0.01);
+        add(_sun_emitter);
     }
     
     /**
