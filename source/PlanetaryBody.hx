@@ -3,11 +3,11 @@ package ;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup;
-import flixel.group.FlxTypedGroup;
-import flixel.util.FlxAngle;
+import flixel.group.FlxGroup.FlxTypedGroup;
+import flixel.math.FlxAngle;
 import flixel.util.FlxColor;
 import flixel.util.FlxDestroyUtil;
-import flixel.util.FlxPoint;
+import flixel.math.FlxPoint;
 
 using flixel.util.FlxSpriteUtil;
 
@@ -49,7 +49,7 @@ class PlanetaryBody
     public var name : String = "Unknown";
     public var size : Float = -1;
     public var color(get_color, set_color) : Int;
-    private var _color : Int = FlxColor.AQUAMARINE;
+    private var _color : Int = FlxColor.BLUE;
     public var angular_position : Float = 0;
     public var rotation_speed : Float = 0;
     public var rotation_direction : Int = 1;
@@ -98,9 +98,9 @@ class PlanetaryBody
         }
     }
 
-    public override function update() : Void
+    public override function update(elapsed : Float) : Void
     {
-        super.update();
+        super.update(elapsed);
 
         rotate();
     }
@@ -127,8 +127,10 @@ class PlanetaryBody
         if (angular_position > 359)
             angular_position = 0;
 
-        destination_point = FlxAngle.rotatePoint(parent.center_position.x - orbit_distance, parent.center_position.y, parent.center_position.x, parent.center_position.y, angular_position);
-    
+        var center_point : FlxPoint = FlxPoint.weak(parent.center_position.x - orbit_distance, parent.center_position.y);
+
+        destination_point = center_point.rotate(FlxPoint.weak(parent.center_position.x, parent.center_position.y), angular_position);
+
         // TODO: Seems to be a memory leak in flash.. I have a suspicion it's here.  Try FlxPoint.weak().
         set_center_position(destination_point);
     }

@@ -2,7 +2,6 @@ package ;
 
 import flash.display.LineScaleMode;
 import flixel.effects.particles.FlxEmitter;
-import flixel.effects.particles.FlxEmitterExt;
 import flixel.effects.particles.FlxParticle;
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -11,10 +10,10 @@ import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.util.FlxColor;
 import flixel.util.FlxDestroyUtil;
-import flixel.util.FlxMath;
-import flixel.util.FlxPoint;
+import flixel.math.FlxMath;
+import flixel.math.FlxPoint;
 import flixel.util.FlxSpriteUtil.LineStyle;
-import MySpriteUtil;
+//import MySpriteUtil;
 
 /**
  * A FlxState which can be used for the actual gameplay.
@@ -28,7 +27,7 @@ class PlayState extends FlxState
 
     private var _orbit_sprite : FlxSprite;
     private var _sun : PlanetaryBody;
-    private var _sun_emitter : FlxEmitterExt;
+    private var _sun_emitter : FlxEmitter;
     //private var _particle : FlxParticle;
 
     /**
@@ -55,13 +54,13 @@ class PlayState extends FlxState
         _sun.color = FlxColor.YELLOW;
 
         _sun.create_child("Mercury", PlanetaryBody.PLANETS.mercury).color = FlxColor.GRAY;
-        _sun.create_child("Venus", PlanetaryBody.PLANETS.venus).color = FlxColor.WHEAT;
+        _sun.create_child("Venus", PlanetaryBody.PLANETS.venus).color = FlxColor.ORANGE;
         _sun.create_child("Earth", PlanetaryBody.PLANETS.earth).color = FlxColor.CYAN;
         _sun.create_child("Mars", PlanetaryBody.PLANETS.mars).color = FlxColor.RED;
-        _sun.create_child("Jupiter", PlanetaryBody.PLANETS.jupiter).color = FlxColor.GOLDENROD;
-        _sun.create_child("Saturn", PlanetaryBody.PLANETS.saturn).color = FlxColor.MAUVE;
-        _sun.create_child("Uranus", PlanetaryBody.PLANETS.uranus).color = FlxColor.AZURE;
-        _sun.create_child("Neptune", PlanetaryBody.PLANETS.neptune).color = FlxColor.AQUAMARINE;
+        _sun.create_child("Jupiter", PlanetaryBody.PLANETS.jupiter).color = FlxColor.BROWN;
+        _sun.create_child("Saturn", PlanetaryBody.PLANETS.saturn).color = FlxColor.BLUE;
+        _sun.create_child("Uranus", PlanetaryBody.PLANETS.uranus).color = FlxColor.GREEN;
+        _sun.create_child("Neptune", PlanetaryBody.PLANETS.neptune).color = FlxColor.LIME;
         _sun.create_child("Pluto", PlanetaryBody.PLANETS.pluto).color = FlxColor.BROWN;
 
         add(_sun);
@@ -70,9 +69,9 @@ class PlayState extends FlxState
                 draw_orbit(Planet.orbit_distance);
             });
 
+/*
 
-
-        _sun_emitter = new FlxEmitterExt(FlxG.width / 2, FlxG.height / 2, 500);
+        _sun_emitter = new FlxEmitter(FlxG.width / 2, FlxG.height / 2, 500);
         _sun_emitter.setMotion(0, 1, 0.1, 360, 5, 0.5);
         _sun_emitter.setXSpeed(1000, 5000);
         _sun_emitter.setYSpeed(1000, 5000);
@@ -93,6 +92,7 @@ class PlayState extends FlxState
 
         _sun_emitter.start(false, -1, 0.01);
         add(_sun_emitter);
+        */
     }
     
     /**
@@ -110,9 +110,9 @@ class PlayState extends FlxState
     /**
      * Function that is called once every frame.
      */
-    override public function update():Void
+    override public function update(elapsed : Float):Void
     {
-        super.update();
+        super.update(elapsed);
 
         if (FlxG.mouse.wheel > 0)
             setZoom(FlxG.camera.zoom + .1);
@@ -146,6 +146,7 @@ class PlayState extends FlxState
         FlxG.camera.zoom = zoom;
         FlxG.camera.width = camera_width;
         FlxG.camera.height = camera_height;
-        FlxG.camera.scroll.set(scroll_x, scroll_y);
+        // NOTE: Apparently not needed for the current dev branch..
+        //FlxG.camera.scroll.set(scroll_x, scroll_y);
     }
 }

@@ -7,7 +7,6 @@ import flash.display.Sprite;
 import flixel.FlxSprite;
 import flixel.util.FlxColor;
 import flixel.util.FlxSpriteUtil;
-import flixel.util.FlxColorUtil;
 using flixel.util.FlxSpriteUtil;
 
 class MySpriteUtil
@@ -17,7 +16,7 @@ class MySpriteUtil
         var flashGfxSprite : Sprite = new Sprite();
         var flashGfx : Graphics = flashGfxSprite.graphics;
 
-        flashGfx.lineStyle(lineStyle.thickness, lineStyle.color & 0xffffff, FlxColorUtil.getAlphaFloat(lineStyle.color), lineStyle.pixelHinting, lineStyle.scaleMode, lineStyle.capsStyle, lineStyle.jointStyle, lineStyle.miterLimit);
+        flashGfx.lineStyle(lineStyle.thickness, lineStyle.color & 0xffffff, lineStyle.color.alphaFloat, lineStyle.pixelHinting, lineStyle.scaleMode, lineStyle.capsStyle, lineStyle.jointStyle, lineStyle.miterLimit);
         flashGfx.drawCircle(X, Y, Radius);
 
         if (drawStyle == null)
@@ -25,7 +24,7 @@ class MySpriteUtil
 
         sprite.pixels.draw(flashGfxSprite, drawStyle.matrix, drawStyle.colorTransform, drawStyle.blendMode, drawStyle.clipRect, drawStyle.smoothing);
         sprite.dirty = true;
-        sprite.resetFrameBitmapDatas();
+        sprite.resetFrameBitmaps();
     }
 
     public static function generate_perlin_sphere(radius : Float, octaves : Int, color_mask : UInt) : FlxSprite
