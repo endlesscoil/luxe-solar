@@ -27,8 +27,6 @@ class PlayState extends FlxState
 
     private var _orbit_sprite : FlxSprite;
     private var _sun : PlanetaryBody;
-    private var _sun_emitter : FlxEmitter;
-    //private var _particle : FlxParticle;
 
     /**
      * Function that is called up when to state is created to set it up. 
@@ -53,46 +51,30 @@ class PlayState extends FlxState
         _sun.center_position = FlxPoint.weak(FlxG.width / 2, FlxG.height / 2);
         _sun.color = FlxColor.YELLOW;
 
-        _sun.create_child("Mercury", PlanetaryBody.PLANETS.mercury).color = FlxColor.GRAY;
-        _sun.create_child("Venus", PlanetaryBody.PLANETS.venus).color = FlxColor.ORANGE;
-        _sun.create_child("Earth", PlanetaryBody.PLANETS.earth).color = FlxColor.CYAN;
-        _sun.create_child("Mars", PlanetaryBody.PLANETS.mars).color = FlxColor.RED;
-        _sun.create_child("Jupiter", PlanetaryBody.PLANETS.jupiter).color = FlxColor.BROWN;
-        _sun.create_child("Saturn", PlanetaryBody.PLANETS.saturn).color = FlxColor.BLUE;
-        _sun.create_child("Uranus", PlanetaryBody.PLANETS.uranus).color = FlxColor.GREEN;
-        _sun.create_child("Neptune", PlanetaryBody.PLANETS.neptune).color = FlxColor.LIME;
-        _sun.create_child("Pluto", PlanetaryBody.PLANETS.pluto).color = FlxColor.BROWN;
+        for (i in 0...9)
+        {
+            var size : Float = 10 + Std.random(cast (PlanetaryBody.BASE_SIZE - 10, Int));
+            var period : Float = 0.05 + Math.random() * (PlanetaryBody.BASE_ORBITAL_PERIOD - 0.05);
+            var direction : Int = 1;
+            if (Std.random(10) > 7)
+                direction = -1;
+            var color : FlxColor = FlxColor.fromRGB(Std.random(256), Std.random(256), Std.random(256));
+            
+            trace('planet size=$size, period=$period, direction=$direction');
+
+            _sun.create_child("Blah" + Std.string(i), { 
+                distance: PlanetaryBody.AU * (i + 1),
+                size: size,
+                period: period,
+                direction: direction
+            }).color = color;
+        }
 
         add(_sun);
 
         _sun.children.forEach(function(Planet : PlanetaryBody) : Void {
                 draw_orbit(Planet.orbit_distance);
             });
-
-/*
-
-        _sun_emitter = new FlxEmitter(FlxG.width / 2, FlxG.height / 2, 500);
-        _sun_emitter.setMotion(0, 1, 0.1, 360, 5, 0.5);
-        _sun_emitter.setXSpeed(1000, 5000);
-        _sun_emitter.setYSpeed(1000, 5000);
-
-        for (i in 0..._sun_emitter.maxSize)
-        {
-            var color : UInt = FlxColor.YELLOW;
-            if (i % 2 == 0)
-                color = FlxColor.GOLDENROD;
-
-            var particle = new FlxParticle();
-            particle.makeGraphic(2, 2, color);
-            particle.visible = false;
-            _sun_emitter.add(particle);
-        }
-        
-        //_sun_emitter.makeParticles(particle, 50);
-
-        _sun_emitter.start(false, -1, 0.01);
-        add(_sun_emitter);
-        */
     }
     
     /**
@@ -147,6 +129,7 @@ class PlayState extends FlxState
         FlxG.camera.width = camera_width;
         FlxG.camera.height = camera_height;
         // NOTE: Apparently not needed for the current dev branch..
-        //FlxG.camera.scroll.set(scroll_x, scroll_y);
+        // Or maybe it is.. needed at work.
+        FlxG.camera.scroll.set(scroll_x, scroll_y);
     }
 }
