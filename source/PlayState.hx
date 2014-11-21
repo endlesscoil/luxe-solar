@@ -53,21 +53,7 @@ class PlayState extends FlxState
 
         for (i in 0...9)
         {
-            var size : Float = 10 + Std.random(cast (PlanetaryBody.BASE_SIZE - 10, Int));
-            var period : Float = 0.05 + Math.random() * (PlanetaryBody.BASE_ORBITAL_PERIOD - 0.05);
-            var direction : Int = 1;
-            if (Std.random(10) > 7)
-                direction = -1;
-            var color : FlxColor = FlxColor.fromRGB(Std.random(256), Std.random(256), Std.random(256));
-            
-            trace('planet size=$size, period=$period, direction=$direction');
-
-            _sun.create_child("Blah" + Std.string(i), { 
-                distance: PlanetaryBody.AU * (i + 1),
-                size: size,
-                period: period,
-                direction: direction
-            }).color = color;
+            generate_planet(i);
         }
 
         add(_sun);
@@ -102,6 +88,27 @@ class PlayState extends FlxState
             setZoom(FlxG.camera.zoom - .1);
     }
 
+    private function generate_planet(Index : Int) : PlanetaryBody
+    {
+        var direction : Int = 1;
+        if (Std.random(10) > 7)
+            direction = -1;
+
+        var spec : Dynamic = {
+            distance: PlanetaryBody.AU * (Index + 1),
+            size: 10 + Std.random(cast (PlanetaryBody.BASE_SIZE - 10, Int)),
+            period: 0.05 + Math.random() * (PlanetaryBody.BASE_ORBITAL_PERIOD - 0.05),
+            direction: direction
+        };
+        
+        var child : PlanetaryBody = _sun.create_child("Blah" + Std.string(Index), spec);
+        child.color = FlxColor.fromRGB(Std.random(256), Std.random(256), Std.random(256));
+
+        trace('planet spec=$spec, color=${child.color}');
+
+        return child;
+    }
+
     private function draw_orbit(Orbit : Float)
     {
         var lineStyle : LineStyle = { color: FlxColor.GRAY & 0x55FFFFFF, thickness: 2, pixelHinting: true, scaleMode: LineScaleMode.NONE };
@@ -109,7 +116,7 @@ class PlayState extends FlxState
         MySpriteUtil.drawCircle(_orbit_sprite, _orbit_sprite.width / 2, _orbit_sprite.height / 2, Orbit, FlxColor.TRANSPARENT, lineStyle);
     }
 
-    public function setZoom(zoom : Float)
+    public function setZoom(zoom : Float) : Void
     {
         var center_pos : FlxPoint = FlxPoint.weak(FlxG.width / 2, FlxG.height / 2);
         var camera_width : Int = Math.ceil(FlxG.width / zoom);
