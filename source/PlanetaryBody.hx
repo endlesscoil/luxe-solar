@@ -5,6 +5,7 @@ import flixel.FlxSprite;
 import flixel.group.FlxGroup;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxAngle;
+import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import flixel.util.FlxDestroyUtil;
 import flixel.math.FlxPoint;
@@ -46,7 +47,8 @@ class PlanetaryBody
         pluto: { distance: AU * 9, size: BASE_SIZE * 0.5 * 0.4, period: BASE_ORBITAL_PERIOD / 247.7, direction: 1 }
     }
 
-    public var name : String = "Unknown";
+    public var name(default, set_name) : String;
+    private var _name : String = "Unknown";
     public var size : Float = -1;
     public var color(get_color, set_color) : Int;
     private var _color : Int = FlxColor.BLUE;
@@ -65,6 +67,7 @@ class PlanetaryBody
     private var _pos_sprite : FlxSprite = null;
     private var _center_sprite : FlxSprite = null;
     private var _orbit_sprite : FlxSprite = null;
+    private var _text : FlxText = new FlxText();
 
     private var _debug : Bool = false;
 
@@ -78,6 +81,10 @@ class PlanetaryBody
         rotation_direction = Spec.direction;
 
         _debug = Debug;
+
+        _text.color = FlxColor.WHITE;
+        _text.size = 12;
+        add(_text);
 
         _sprite = new FlxSprite();
         _color = Spec.color;
@@ -163,6 +170,14 @@ class PlanetaryBody
         add(_sprite);
     }
 
+    private function set_name(value : String) : String
+    {
+        _name = value;
+        _text.text = value;
+
+        return _name;
+    }
+
     private function get_color() : Int { return _color; }
     private function set_color(value : Int) : Int
     {
@@ -185,6 +200,9 @@ class PlanetaryBody
 
         if (_orbit_sprite != null && parent != null && parent.rotation_speed > 0)
             _orbit_sprite.setPosition(parent.center_position.x - orbit_distance - 1);
+
+        if (_text != null)
+            _text.setPosition(value.x - _text.width / 2, value.y + _sprite.height / 2);
 
         return _center_position = value;
     }
