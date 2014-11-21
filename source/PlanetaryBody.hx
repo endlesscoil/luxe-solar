@@ -11,7 +11,7 @@ import flixel.math.FlxPoint;
 
 using flixel.util.FlxSpriteUtil;
 
-typedef PlanetSpec = { distance : Float, size: Float, period : Float, direction: Int }
+typedef PlanetSpec = { distance : Float, size: Float, period : Float, direction: Int, color: FlxColor }
 
 class PlanetaryBody
     extends FlxGroup 
@@ -80,6 +80,7 @@ class PlanetaryBody
         _debug = Debug;
 
         _sprite = new FlxSprite();
+        _color = Spec.color;
         create_graphic();
         add(_sprite);
 

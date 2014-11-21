@@ -47,20 +47,25 @@ class PlayState extends FlxState
 
         add(_orbit_sprite);
 
-        _sun = new PlanetaryBody({ distance: -1, size: 30, period: 0, direction: 0 }, debug);
+        _sun = new PlanetaryBody({ distance: -1, size: 30, period: 0, direction: 0, color: FlxColor.YELLOW }, debug);
         _sun.center_position = FlxPoint.weak(FlxG.width / 2, FlxG.height / 2);
-        _sun.color = FlxColor.YELLOW;
+        //_sun.color = FlxColor.YELLOW;
 
-        for (i in 0...9)
+        var num_planets : Int = Std.random(9) + 1;
+        trace('Generating $num_planets planets..');
+        for (i in 0...num_planets)
         {
             generate_planet(i);
         }
 
         add(_sun);
 
+        trace('Drawing orbits..');
         _sun.children.forEach(function(Planet : PlanetaryBody) : Void {
-                draw_orbit(Planet.orbit_distance);
-            });
+            draw_orbit(Planet.orbit_distance);
+        });
+
+        trace('Running!');
     }
     
     /**
@@ -90,21 +95,17 @@ class PlayState extends FlxState
 
     private function generate_planet(Index : Int) : PlanetaryBody
     {
-        var direction : Int = 1;
-        if (Std.random(10) > 7)
-            direction = -1;
-
         var spec : Dynamic = {
             distance: PlanetaryBody.AU * (Index + 1),
             size: 10 + Std.random(cast (PlanetaryBody.BASE_SIZE - 10, Int)),
             period: 0.05 + Math.random() * (PlanetaryBody.BASE_ORBITAL_PERIOD - 0.05),
-            direction: direction
+            direction: (Std.random(10) > 7) ? -1 : 1,
+            color: FlxColor.fromRGB(Std.random(256), Std.random(256), Std.random(256))
         };
         
         var child : PlanetaryBody = _sun.create_child("Blah" + Std.string(Index), spec);
-        child.color = FlxColor.fromRGB(Std.random(256), Std.random(256), Std.random(256));
 
-        trace('planet spec=$spec, color=${child.color}');
+        trace('planet spec=$spec');
 
         return child;
     }
