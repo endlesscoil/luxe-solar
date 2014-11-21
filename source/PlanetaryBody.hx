@@ -6,6 +6,7 @@ import flixel.group.FlxGroup;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxAngle;
 import flixel.text.FlxText;
+import flixel.util.FlxCollision;
 import flixel.util.FlxColor;
 import flixel.util.FlxDestroyUtil;
 import flixel.math.FlxPoint;
@@ -47,7 +48,7 @@ class PlanetaryBody
         pluto: { distance: AU * 9, size: BASE_SIZE * 0.5 * 0.4, period: BASE_ORBITAL_PERIOD / 247.7, direction: 1 }
     }
 
-    public var name(default, set_name) : String;
+    public var name(get_name, set_name) : String;
     private var _name : String = "Unknown";
     public var size : Float = -1;
     public var color(get_color, set_color) : Int;
@@ -71,10 +72,11 @@ class PlanetaryBody
 
     private var _debug : Bool = false;
 
-    public function new(Spec : PlanetSpec, ?Debug : Bool = false)
+    public function new(Name : String, Spec : PlanetSpec, ?Debug : Bool = false)
     {
         super();
-
+        
+        name = Name;
         size = Spec.size;
         orbit_distance = Spec.distance;
         rotation_speed = Spec.period;
@@ -82,14 +84,14 @@ class PlanetaryBody
 
         _debug = Debug;
 
-        _text.color = FlxColor.WHITE;
-        _text.size = 12;
-        add(_text);
-
         _sprite = new FlxSprite();
         _color = Spec.color;
         create_graphic();
         add(_sprite);
+
+        _text.color = FlxColor.GRAY;
+        _text.size = 12;
+        add(_text);
 
         children = new FlxTypedGroup<PlanetaryBody>();
         add(children);
@@ -111,6 +113,8 @@ class PlanetaryBody
         super.update(elapsed);
 
         rotate();
+
+        _text.setPosition(center_position.x - _text.frameWidth / 2, center_position.y + _sprite.height / 2);
     }
 
     public override function destroy() : Void
@@ -145,9 +149,7 @@ class PlanetaryBody
 
     public function create_child(Name : String, Spec : PlanetSpec)
     {
-        var child : PlanetaryBody = new PlanetaryBody(Spec, _debug);
-
-        child.name = Name;
+        var child : PlanetaryBody = new PlanetaryBody(Name, Spec, _debug);
         add_child(child);
 
         return child;
@@ -161,6 +163,16 @@ class PlanetaryBody
         children.add(Child);
     }
 
+    public function check_collision(X : Int, Y : Int) : Bool
+    {
+        return FlxCollision.pixelPerfectPointCheck(X, Y, _sprite);
+    }
+
+    public function set_text_color(Color : FlxColor) : Void
+    {
+        _text.color = Color;
+    }
+
     private function create_graphic() : Void
     {
         _sprite = FlxDestroyUtil.destroy(_sprite);
@@ -170,6 +182,7 @@ class PlanetaryBody
         add(_sprite);
     }
 
+    private function get_name() : String { return _name; }
     private function set_name(value : String) : String
     {
         _name = value;
@@ -201,8 +214,12 @@ class PlanetaryBody
         if (_orbit_sprite != null && parent != null && parent.rotation_speed > 0)
             _orbit_sprite.setPosition(parent.center_position.x - orbit_distance - 1);
 
-        if (_text != null)
-            _text.setPosition(value.x - _text.width / 2, value.y + _sprite.height / 2);
+        /*if (_text != null)
+        {
+            trace('$name -> value=$value, txtwidth=${_text.frameWidth} sprheight=${_sprite.height}');
+
+            _text.setPosition(value.x - _text.frameWidth / 2, value.y + _sprite.height / 2);
+        }*/
 
         return _center_position = value;
     }

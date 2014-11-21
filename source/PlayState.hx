@@ -8,6 +8,7 @@ import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.text.FlxText;
 import flixel.ui.FlxButton;
+import flixel.util.FlxCollision;
 import flixel.util.FlxColor;
 import flixel.util.FlxDestroyUtil;
 import flixel.math.FlxMath;
@@ -47,7 +48,7 @@ class PlayState extends FlxState
 
         add(_orbit_sprite);
 
-        _sun = new PlanetaryBody({ distance: -1, size: 30, period: 0, direction: 0, color: FlxColor.YELLOW }, debug);
+        _sun = new PlanetaryBody('Sol', { distance: -1, size: 30, period: 0, direction: 0, color: FlxColor.YELLOW }, debug);
         _sun.center_position = FlxPoint.weak(FlxG.width / 2, FlxG.height / 2);
 
         var num_planets : Int = Std.random(9) + 1;
@@ -90,6 +91,18 @@ class PlayState extends FlxState
             setZoom(FlxG.camera.zoom + .1);
         if (FlxG.mouse.wheel < 0)
             setZoom(FlxG.camera.zoom - .1);
+
+        if (_sun.check_collision(FlxG.mouse.x, FlxG.mouse.y))
+            _sun.set_text_color(FlxColor.WHITE);
+        else
+            _sun.set_text_color(FlxColor.GRAY);
+
+        _sun.children.forEach(function(Planet : PlanetaryBody) : Void {
+            if (Planet.check_collision(FlxG.mouse.x, FlxG.mouse.y))
+                Planet.set_text_color(FlxColor.WHITE);
+            else
+                Planet.set_text_color(FlxColor.GRAY);
+        });
     }
 
     private function generate_planet(Index : Int) : PlanetaryBody
