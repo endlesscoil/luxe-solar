@@ -49,7 +49,6 @@ class PlayState extends FlxState
 
         _sun = new PlanetaryBody({ distance: -1, size: 30, period: 0, direction: 0, color: FlxColor.YELLOW }, debug);
         _sun.center_position = FlxPoint.weak(FlxG.width / 2, FlxG.height / 2);
-        //_sun.color = FlxColor.YELLOW;
 
         var num_planets : Int = Std.random(9) + 1;
         trace('Generating $num_planets planets..');
@@ -103,11 +102,21 @@ class PlayState extends FlxState
             color: FlxColor.fromRGB(Std.random(256), Std.random(256), Std.random(256))
         };
         
-        var child : PlanetaryBody = _sun.create_child("Blah" + Std.string(Index), spec);
+        var name : String = generate_name();
 
-        trace('planet spec=$spec');
+        var child : PlanetaryBody = _sun.create_child(name, spec);
+
+        trace('planet ${child.name} spec=$spec');
 
         return child;
+    }
+
+    private function generate_name() : String
+    {
+        var prefixes : Array<String> = ['Ultra', 'Mega', 'Super', 'Gummy', 'Zen'];
+        var suffixes : Array<String> = ['Viking', 'Bee', 'Rex', 'Witch', 'Samurai'];
+
+        return prefixes[Std.random(prefixes.length)] + ' ' + suffixes[Std.random(suffixes.length)] + ' ' + Std.random(10);
     }
 
     private function draw_orbit(Orbit : Float)
