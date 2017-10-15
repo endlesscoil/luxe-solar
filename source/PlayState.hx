@@ -158,8 +158,6 @@ class PlayState extends FlxState
         FlxG.camera.zoom = zoom;
         FlxG.camera.width = camera_width;
         FlxG.camera.height = camera_height;
-        // NOTE: Apparently not needed for the current dev branch..
-        // Or maybe it is.. needed at work.
         FlxG.camera.scroll.set(scroll_x, scroll_y);
     }
 }
